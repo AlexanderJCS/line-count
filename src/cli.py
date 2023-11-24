@@ -12,6 +12,7 @@ def get_args() -> argparse.Namespace:
 
     parser.add_argument("file_or_dir", help="The file or directory to count the lines of. If you want to include all files in this directory, use a \".\"")
     parser.add_argument("-r", "--recursive", action="store_true", help="If the program should search subdirectories")
+    parser.add_argument("-e", "--exclude", help="Excludes any files containing the comma separated values given. e.g., \".txt,.cpp\" will exclude any text files containing .txt or .cpp in their name.")
     return parser.parse_args()
 
 
@@ -55,11 +56,11 @@ def main():
         print_table(stats, [stats])
 
     elif args.recursive is True:
-        summary_stats, indivdual_stats = line_counting.count_lines_dir_recursive(args.file_or_dir)
+        summary_stats, indivdual_stats = line_counting.count_lines_dir_recursive(args.file_or_dir, exclude=args.exclude.split(","))
         print_table(summary_stats, indivdual_stats)
 
     else:
-        summary_stats, individual_stats = line_counting.count_lines_dir(args.file_or_dir)
+        summary_stats, individual_stats = line_counting.count_lines_dir(args.file_or_dir, exclude=args.exclude.split(","))
         print_table(summary_stats, individual_stats)
 
 

@@ -11,6 +11,24 @@ LineStats = namedtuple(
 )
 
 
+def _add_line_stats(line_stats_1: LineStats, line_stats_2: LineStats):
+    """
+    Add the values of two line stats objects. Keeps the filepath of the first line stats object.
+
+    :param line_stats_1: The first line stat to add
+    :param line_stats_2: The second line stat to add
+    :return: A new LineStats object with the added values
+    """
+
+    return LineStats(
+        filepath=line_stats_1,
+        lines=line_stats_1.lines + line_stats_2.lines,
+        source_lines_of_code=line_stats_1.source_lines_of_code + line_stats_2.source_lines_of_code,
+        commented_lines=line_stats_1.commented_lines + line_stats_2.commented_lines,
+        blank_lines=line_stats_1.blank_lines + line_stats_2.blank_lines
+    )
+
+
 def _inline_comment_status(line: str, in_comment: bool) -> bool | None:
     """
     Checks if the line entered, exited, or did not enter or exit an inline comment.
@@ -99,19 +117,29 @@ def count_lines_file(filepath: str):
     )
 
 
-def count_lines_dir(dir_path: str) -> tuple[LineStats, list[LineStats]]:
+def _is_excluded(filename: str, exclude: list[str]) -> bool:
+    for exclude_item in exclude:
+        if exclude_item in filename:
+            return True
+
+    return False
+
+
+def count_lines_dir(dir_path: str, exclude: list[str] | None = None) -> tuple[LineStats, list[LineStats]]:
     """
     Counts the lines of all files within a directory. Not recursive.
 
     :param dir_path: The path to the directory to count the lines of all the files inside.
+    :param exclude: Excludes any files containing any of the string patterns in the name
+
     :return: A tuple of two values: a LineStats object that adds up the lines across all files, and a list of LineStats
              objects for individual files.
     """
 
-    total_lines = 0
-    total_commented_lines = 0
-    total_blank_lines = 0
-    total_sloc = 0  # total source lines of code
+    if exclude is None:
+        exclude = []
+
+    summary_stats = LineStats(dir_path, 0, 0, 0, 0)
 
     individual_stats: list[LineStats] = []
 
@@ -119,6 +147,11 @@ def count_lines_dir(dir_path: str) -> tuple[LineStats, list[LineStats]]:
         if not os.path.isfile(os.path.join(dir_path, file)):
             continue
 
+        # Skip excluded files
+        if _is_excluded(file, exclude):
+            continue
+
+        # Add the line stats if the file is not excluded
         try:
             line_stats = count_lines_file(os.path.join(dir_path, file))
             individual_stats.append(line_stats)
@@ -127,42 +160,34 @@ def count_lines_dir(dir_path: str) -> tuple[LineStats, list[LineStats]]:
             pass
 
         else:
-            total_lines += line_stats.lines
-            total_commented_lines += line_stats.commented_lines
-            total_blank_lines += line_stats.blank_lines
-            total_sloc += line_stats.source_lines_of_code
+            summary_stats = _add_line_stats(summary_stats, line_stats)
 
-    return (
-            LineStats(
-                filepath=dir_path,
-                lines=total_lines,
-                source_lines_of_code=total_sloc,
-                commented_lines=total_commented_lines,
-                blank_lines=total_blank_lines
-            ),
-
-            individual_stats
-    )
+    return summary_stats, individual_stats
 
 
-def count_lines_dir_recursive(dir_path: str) -> tuple[LineStats, list[LineStats]]:
+def count_lines_dir_recursive(dir_path: str, exclude: list[str] | None = None) -> tuple[LineStats, list[LineStats]]:
     """
     Recursively counts the lines of all files within a directory.
 
     :param dir_path: The path to the directory to count the lines of all the files inside.
+    :param exclude: Excludes any files containing any of the string patterns in the name
     :return: A tuple of two values: a LineStats object that adds up the lines across all files, and a list of LineStats
              objects for individual files.
     """
 
-    total_lines = 0
-    total_commented_lines = 0
-    total_blank_lines = 0
-    total_sloc = 0  # total source lines of code
+    if exclude is None:
+        exclude = []
+
+    summary_stats = LineStats(dir_path, 0, 0, 0, 0)
 
     individual_stats: list[LineStats] = []
 
     for root, dirs, files in os.walk(dir_path):
         for file in files:
+            # Skip excluded files
+            if _is_excluded(file, exclude):
+                continue
+
             try:
                 line_stats = count_lines_file(os.path.join(root, file))
                 individual_stats.append(line_stats)
@@ -171,19 +196,6 @@ def count_lines_dir_recursive(dir_path: str) -> tuple[LineStats, list[LineStats]
                 pass
 
             else:
-                total_lines += line_stats.lines
-                total_commented_lines += line_stats.commented_lines
-                total_blank_lines += line_stats.blank_lines
-                total_sloc += line_stats.source_lines_of_code
+                summary_stats = _add_line_stats(summary_stats, line_stats)
 
-    return (
-        LineStats(
-            filepath=dir_path,
-            lines=total_lines,
-            source_lines_of_code=total_sloc,
-            commented_lines=total_commented_lines,
-            blank_lines=total_blank_lines
-        ),
-
-        individual_stats
-    )
+    return summary_stats, individual_stats
