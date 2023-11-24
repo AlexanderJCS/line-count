@@ -1,9 +1,6 @@
-
 import argparse
-import re
 import os.path
 
-import exceptions
 import line_counting
 
 
