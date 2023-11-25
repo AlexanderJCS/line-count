@@ -126,20 +126,33 @@ def count_lines_file(filepath: str):
     )
 
 
-def _is_excluded(file_or_dir_name: str, exclude: list[str]) -> bool:
-    for exclude_item in exclude:
-        if exclude_item in file_or_dir_name:
+def _fits_at_least_one_pattern(string: str, patterns: list[str]) -> bool:
+    """
+    Checks if there's at least one pattern that matches the string. Used for checking if a dir/file is included/excluded
+
+    :param string: The string to find the patterns in
+    :param patterns: A list of string patterns (NOT regexes) to find in string
+    :return: True if one of the patterns is inside the string. False otherwise.
+    """
+
+    for pattern in patterns:
+        if pattern in string:
             return True
 
     return False
 
 
-def count_lines_dir(dir_path: str, exclude_files: list[str] | None = None) -> tuple[LineStats, list[LineStats]]:
+def count_lines_dir(
+        dir_path: str,
+        exclude_files: list[str] | None = None,
+        include_files: list[str] | None = None
+) -> tuple[LineStats, list[LineStats]]:
     """
     Counts the lines of all files within a directory. Not recursive.
 
     :param dir_path: The path to the directory to count the lines of all the files inside.
-    :param exclude_files: Excludes any files containing any of the string patterns in the name
+    :param exclude_files: Excludes any files containing any of the string patterns in the filename
+    :param include_files: Only reads the lines of files that contain any of the string patterns in the filename
 
     :return: A tuple of two values: a LineStats object that adds up the lines across all files, and a list of LineStats
              objects for individual files.
@@ -147,6 +160,9 @@ def count_lines_dir(dir_path: str, exclude_files: list[str] | None = None) -> tu
 
     if exclude_files is None:
         exclude_files = []
+
+    if include_files is None:
+        include_files = []
 
     summary_stats = LineStats(dir_path, 0, 0, 0, 0)
 
@@ -157,7 +173,11 @@ def count_lines_dir(dir_path: str, exclude_files: list[str] | None = None) -> tu
             continue
 
         # Skip excluded files
-        if _is_excluded(file, exclude_files):
+        if _fits_at_least_one_pattern(file, exclude_files):
+            continue
+
+        # Skip non-included files
+        if not _fits_at_least_one_pattern(file, include_files):
             continue
 
         # Add the line stats if the file is not excluded
@@ -177,6 +197,7 @@ def count_lines_dir(dir_path: str, exclude_files: list[str] | None = None) -> tu
 def count_lines_dir_recursive(
         dir_path: str,
         exclude_files: list[str] | None = None,
+        include_files: list[str] | None = None,
         exclude_dirs: list[str] | None = None
 ) -> tuple[LineStats, list[LineStats]]:
     """
@@ -184,7 +205,9 @@ def count_lines_dir_recursive(
 
     :param dir_path: The path to the directory to count the lines of all the files inside.
     :param exclude_files: Excludes any files containing any of the string patterns in the name
+    :param include_files: Only reads the lines of files that contain any of the string patterns in the filename
     :param exclude_dirs: Excludes any directories containing any of the string patterns in the name
+
     :return: A tuple of two values: a LineStats object that adds up the lines across all files, and a list of LineStats
              objects for individual files.
     """
@@ -195,6 +218,9 @@ def count_lines_dir_recursive(
     if exclude_dirs is None:
         exclude_dirs = []
 
+    if include_files is None:
+        include_files = []
+
     summary_stats = LineStats(dir_path, 0, 0, 0, 0)
 
     individual_stats: list[LineStats] = []
@@ -202,11 +228,15 @@ def count_lines_dir_recursive(
     for root, dirs, files in os.walk(dir_path):
         for file in files:
             # Skip excluded files
-            if _is_excluded(file, exclude_files):
+            if _fits_at_least_one_pattern(file, exclude_files):
                 continue
 
             # Skip excluded directories
-            if _is_excluded(root[len(dir_path):], exclude_dirs):
+            if _fits_at_least_one_pattern(root[len(dir_path):], exclude_dirs):
+                continue
+
+            # Skip non-included files
+            if not _fits_at_least_one_pattern(file, include_files):
                 continue
 
             try:
