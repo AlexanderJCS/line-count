@@ -60,6 +60,10 @@ def cli():
 
     args.exclude = [] if args.exclude is None else args.exclude.split(",")
 
+    if not os.path.exists(args.file_or_dir):
+        print(f"The path {args.file_or_dir} does not exist!")
+        return
+
     if os.path.isfile(args.file_or_dir):
         stats = line_counting.count_lines_file(args.file_or_dir)
         print_table(stats, [stats])
