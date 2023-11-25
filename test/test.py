@@ -1,4 +1,4 @@
-import src.linecount.line_counting as lc
+import src.linecount as lc
 
 
 def test_line_count():

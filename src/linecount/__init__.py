@@ -1,1 +1,1 @@
-from . import line_counting
+from .line_counting import *
