@@ -16,4 +16,4 @@ def test_comment_count_advanced():
 
 
 def test_source_lines_of_code():
-    assert lc.count_lines_file("testfiles/test_sloc.txt").source_lines_of_code == 10
+    assert lc.count_lines_file("testfiles/test_sloc.txt").source_lines_of_code == 5

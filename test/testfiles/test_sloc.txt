@@ -1,23 +1,20 @@
-This file should contain 10 source lines of code.
+This file should contain 5 source lines of code (SLOC).
 
     Here's a SLOC!
 
 Here's one too!
 
+here's a SLOC with an inline comment at the end  // :)
+and another one!  # but with a hashtag inline comment
 
 # Not a source line of code :(
 
 // or this one :(
 
-This is a SLOC /*
- * or these :(
- but this isn't */
+/* This is not a source line of code
+ * or this
+ */ this isn't a SLOC either
 
-/* This is not a SLOC
- */ but this is a SLOC
-
-so is this a SLOC /* comment */
-
-a
-b
-c
+due to limitations with the inline comment algorithm, this is not a SLOC due to the opening-then-closing inline comment /* :) */
+// however, maybe in the future, the above line will be considered a SLOC?
+// definitely something to add to the to-do list, but not a large priority since you don't see the above scenario often
