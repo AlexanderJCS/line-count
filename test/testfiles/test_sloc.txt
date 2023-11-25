@@ -1,0 +1,25 @@
+This file should contain 10 source lines of code.
+
+
+
+
+    Here's a SLOC!
+
+
+Here's one too!
+
+
+# Not a source line of code :(
+
+// or this one :(
+
+This is a SLOC /*
+ * or these :(
+ but this isn't */
+
+a
+b
+c
+d
+e
+f

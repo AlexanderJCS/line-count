@@ -1,0 +1,13 @@
+	# There should be 6 commented lines in this file
+
+not a commented line!
+
+    // Here's a commented line!
+
+Not a commented line  // even though there's an inline comment
+Not a commented line  # even though there's an inline comment
+
+/*
+ * Commented line!
+ * Another commented line!
+ */

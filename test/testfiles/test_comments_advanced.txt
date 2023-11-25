@@ -1,0 +1,10 @@
+This file should contain 1 commented line.
+
+# This is an actual commented line.
+
+"# This shouldn't be a commented line!"
+"// Or this one!"
+
+" /* This should not be a part of a comment "
+Should not be a commented line!
+*/

@@ -1,7 +1,7 @@
 import argparse
 import os.path
 
-import line_counting
+from . import line_counting
 
 
 def get_args() -> argparse.Namespace:
@@ -49,7 +49,7 @@ def main():
 
     # Replace * for a . since otherwise it won't work properly
     if args.file_or_dir == "*":
-        args.file_or_dir = "."
+        args.file_or_dir = ".."
 
     if os.path.isfile(args.file_or_dir):
         stats = line_counting.count_lines_file(args.file_or_dir)
