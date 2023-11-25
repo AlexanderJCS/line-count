@@ -44,6 +44,7 @@ def print_table(summary_stats: line_counting.LineStats, individual_stats: list[l
 
     print(f"{'TOTAL':^{filepath_col_width}}|{summary_stats.lines:^{num_col_width}}|{summary_stats.source_lines_of_code:^{num_col_width}}|{summary_stats.commented_lines:^{num_col_width}}|{summary_stats.blank_lines:^{num_col_width}}")
 
+
 def cli():
     args = get_args()
 
