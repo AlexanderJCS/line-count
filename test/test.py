@@ -7,7 +7,7 @@ def test_line_count():
 
 def test_comment_count_simple():
     # Testing of "simple" inline comments
-    assert lc.count_lines_file("testfiles/test_comments_simple.txt").commented_lines == 6
+    assert lc.count_lines_file("testfiles/test_comments_simple.txt").commented_lines == 8
 
 
 def test_comment_count_advanced():

@@ -1,13 +1,15 @@
-	# There should be 6 commented lines in this file
+	# There should be 8 commented lines in this file
 
 not a commented line!
 
     // Here's a commented line!
+// This is also a commneted line
+# Another comment
 
 Not a commented line  // even though there's an inline comment
 Not a commented line  # even though there's an inline comment
 
-/*
+/* Commented line!
  * Commented line!
  * Another commented line!
- */
+ Commented line! */
