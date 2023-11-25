@@ -77,7 +77,7 @@ def count_lines_file(filepath: str):
     commented_lines = 0
     blank_lines = 0
 
-    with open(filepath, "r") as f:
+    with (open(filepath, "r") as f):
         in_comment: bool = False
 
         try:
@@ -101,7 +101,11 @@ def count_lines_file(filepath: str):
                 split_by_hash_comment = line.split("#")
                 split_by_inline_comment = line.split("/*")
 
-                if split_by_slash_comment[0].isspace() or split_by_hash_comment[0].isspace() or split_by_inline_comment[0].isspace():
+                # Use .strip() instead of .isspace() since "".isspace() returns False
+                if not split_by_slash_comment[0].strip() or \
+                        not split_by_hash_comment[0].strip() or \
+                        not split_by_inline_comment[0].strip():
+
                     commented_lines += 1
 
 
