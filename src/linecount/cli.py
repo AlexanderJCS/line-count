@@ -7,12 +7,33 @@ import line_counting
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="LineCount",
-        description="Counts the number of lines in a file, all files in a directory, or all files in the directory and subdirectories"
+        description="Counts the number of lines in a file, all files in a directory, "
+                    "or all files in the directory and subdirectories"
     )
 
-    parser.add_argument("file_or_dir", help="The file or directory to count the lines of. If you want to include all files in this directory, use a \".\"")
-    parser.add_argument("-r", "--recursive", action="store_true", help="If the program should search subdirectories")
-    parser.add_argument("-e", "--exclude", help="Excludes any files containing the comma separated values given. e.g., \".txt,.cpp\" will exclude any text files containing .txt or .cpp in their name.")
+    parser.add_argument(
+        "file_or_dir",
+        help="The file or directory to count the lines of. If you want to include all "
+             "files in this directory, use a \".\""
+    )
+
+    parser.add_argument(
+        "-r", "--recursive", action="store_true",
+        help="If the program should search subdirectories"
+    )
+
+    parser.add_argument(
+        "-ef", "--excludefiles",
+        help="Excludes any files containing the comma separated values given. e.g., \".txt,.cpp\" will exclude_files any text"
+             " files containing .txt or .cpp in their name."
+    )
+
+    parser.add_argument(
+        "-ed", "--excludedirs",
+        help="Excludes any directories containing the comma separated values given. e.g., \".git,images\" will exclude_files "
+             "any directories containing .git or images in their name."
+    )
+
     return parser.parse_args()
 
 
@@ -58,7 +79,8 @@ def cli():
     if args.file_or_dir == "*":
         args.file_or_dir = "."
 
-    args.exclude = [] if args.exclude is None else args.exclude.split(",")
+    args.excludefiles = [] if args.excludefiles is None else args.excludefiles.split(",")
+    args.excludedirs = [] if args.excludedirs is None else args.excludedirs.split(",")
 
     if not os.path.exists(args.file_or_dir):
         print(f"The path {args.file_or_dir} does not exist!")
@@ -75,11 +97,20 @@ def cli():
             print_table(stats, [stats])
 
     elif args.recursive is True:
-        summary_stats, indivdual_stats = line_counting.count_lines_dir_recursive(args.file_or_dir, exclude=args.exclude)
+        summary_stats, indivdual_stats = line_counting.count_lines_dir_recursive(
+            args.file_or_dir,
+            exclude_files=args.excludefiles,
+            exclude_dirs=args.excludedirs
+        )
+
         print_table(summary_stats, indivdual_stats)
 
     else:
-        summary_stats, individual_stats = line_counting.count_lines_dir(args.file_or_dir, exclude=args.exclude)
+        summary_stats, individual_stats = line_counting.count_lines_dir(
+            args.file_or_dir,
+            exclude_files=args.excludefiles
+        )
+
         print_table(summary_stats, individual_stats)
 
 
