@@ -65,8 +65,14 @@ def cli():
         return
 
     if os.path.isfile(args.file_or_dir):
-        stats = line_counting.count_lines_file(args.file_or_dir)
-        print_table(stats, [stats])
+        try:
+            stats = line_counting.count_lines_file(args.file_or_dir)
+
+        except PermissionError:
+            print("You do not have permission to read that file!")
+
+        else:
+            print_table(stats, [stats])
 
     elif args.recursive is True:
         summary_stats, indivdual_stats = line_counting.count_lines_dir_recursive(args.file_or_dir, exclude=args.exclude)

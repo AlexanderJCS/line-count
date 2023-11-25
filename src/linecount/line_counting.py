@@ -71,7 +71,8 @@ def count_lines_file(filepath: str):
     """
     :param filepath: The filepath of the file to count the lines of
     :return: A tuple of four values: (total lines, num commented lines, num blank lines, source lines of code)
-    :raises LineCountError, when there is an issue decoding a file
+    :raises LineCountError, when there is an issue decoding a file.
+            PermissionError, if you do not have permission to read the file
     """
 
     lines = 0
@@ -164,7 +165,7 @@ def count_lines_dir(dir_path: str, exclude: list[str] | None = None) -> tuple[Li
             line_stats = count_lines_file(os.path.join(dir_path, file))
             individual_stats.append(line_stats)
 
-        except exceptions.LineCountError:
+        except (exceptions.LineCountError, PermissionError):
             pass
 
         else:
@@ -200,7 +201,7 @@ def count_lines_dir_recursive(dir_path: str, exclude: list[str] | None = None) -
                 line_stats = count_lines_file(os.path.join(root, file))
                 individual_stats.append(line_stats)
 
-            except exceptions.LineCountError:
+            except (exceptions.LineCountError, PermissionError):
                 pass
 
             else:
