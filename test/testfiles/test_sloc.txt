@@ -1,10 +1,6 @@
 This file should contain 10 source lines of code.
 
-
-
-
     Here's a SLOC!
-
 
 Here's one too!
 
@@ -17,9 +13,11 @@ This is a SLOC /*
  * or these :(
  but this isn't */
 
+/* This is not a SLOC
+ */ but this is a SLOC
+
+so is this a SLOC /* comment */
+
 a
 b
 c
-d
-e
-f
