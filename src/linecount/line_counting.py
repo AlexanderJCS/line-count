@@ -3,7 +3,7 @@ from collections import namedtuple
 import os.path
 import re
 
-from . import exceptions
+import exceptions
 
 LineStats = namedtuple(
     "LineStats",

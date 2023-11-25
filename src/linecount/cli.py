@@ -1,7 +1,7 @@
 import argparse
 import os.path
 
-from . import line_counting
+import line_counting
 
 
 def get_args() -> argparse.Namespace:
@@ -35,12 +35,18 @@ def print_table(summary_stats: line_counting.LineStats, individual_stats: list[l
 
     print(f"{'FILEPATH':^{filepath_col_width}}|{'LINES':^{num_col_width}}|{'SLOC':^{num_col_width}}|{'COMMENT':^{num_col_width}}|{'BLANK':^{num_col_width}}")
 
+    print("-" * (filepath_col_width + num_col_width * 4 + 4))
+
     for stat in individual_stats:
         print(f"{stat.filepath:<{filepath_col_width}}|{stat.lines:^{num_col_width}}|{stat.source_lines_of_code:^{num_col_width}}|{stat.commented_lines:^{num_col_width}}|{stat.blank_lines:^{num_col_width}}")
 
     # No need to print summary stats for one item
     if len(individual_stats) == 1:
         return
+
+    # Avoid printing 2 lines in a row
+    if len(individual_stats) != 0:
+        print("-" * (filepath_col_width + num_col_width * 4 + 4))
 
     print(f"{'TOTAL':^{filepath_col_width}}|{summary_stats.lines:^{num_col_width}}|{summary_stats.source_lines_of_code:^{num_col_width}}|{summary_stats.commented_lines:^{num_col_width}}|{summary_stats.blank_lines:^{num_col_width}}")
 
@@ -50,7 +56,7 @@ def cli():
 
     # Replace * for a . since otherwise it won't work properly
     if args.file_or_dir == "*":
-        args.file_or_dir = ".."
+        args.file_or_dir = "."
 
     args.exclude = [] if args.exclude is None else args.exclude.split(",")
 
