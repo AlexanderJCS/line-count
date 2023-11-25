@@ -57,7 +57,8 @@ def _inline_comment_status(line: str, in_comment: bool) -> bool | None:
 
     # If the last closing inline comment is after the last opening inline comment
     # AND it is after the opening inline comment, if it exists
-    if no_quote_content[::-1].find("*/") > no_quote_content[::-1].find("/*"):
+    # Since no_quote_content is reversed, to find the last occurence, the findstr also needs to be reversed
+    if no_quote_content[::-1].find("*/"[::-1]) > no_quote_content[::-1].find("/*"[::-1]):
         return False
 
     if "/*" in no_quote_content:
@@ -88,6 +89,10 @@ def count_lines_file(filepath: str):
                 if status is not None:
                     in_comment = status
 
+                    # Do this since closing multi-line comments will otherwise not be counted
+                    commented_lines += 1
+                    continue
+
                 if in_comment:
                     commented_lines += 1
                     continue
@@ -107,7 +112,6 @@ def count_lines_file(filepath: str):
                         not split_by_inline_comment[0].strip():
 
                     commented_lines += 1
-
 
         except UnicodeDecodeError as e:
             raise exceptions.LineCountError(f"Could not decode the file {filepath}. Is it a plaintext file?") from e
