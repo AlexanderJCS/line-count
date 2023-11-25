@@ -1,0 +1,10 @@
+This file should contain 10 lines of code, 4 SLOC, 2 commented lines, and 4 blank lines!
+SLOC 2
+SLOC 3
+
+// Comment 1
+#  Comment 2
+
+
+
+SLOC 4

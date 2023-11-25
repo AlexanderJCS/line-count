@@ -17,3 +17,23 @@ def test_comment_count_advanced():
 
 def test_source_lines_of_code():
     assert lc.count_lines_file("testfiles/test_sloc.txt").source_lines_of_code == 5
+
+
+def test_dir_no_recursive():
+    summary_stats, specific_stats = lc.count_lines_dir("testfiles/test_dir")
+
+    assert len(specific_stats) == 2
+    assert summary_stats.lines == 10 * len(specific_stats)
+    assert summary_stats.commented_lines == 2 * len(specific_stats)
+    assert summary_stats.source_lines_of_code == 4 * len(specific_stats)
+    assert summary_stats.blank_lines == 4 * len(specific_stats)
+
+
+def test_dir_recursive():
+    summary_stats, specific_stats = lc.count_lines_dir_recursive("testfiles/test_dir")
+
+    assert len(specific_stats) == 3
+    assert summary_stats.lines == 10 * len(specific_stats)
+    assert summary_stats.commented_lines == 2 * len(specific_stats)
+    assert summary_stats.source_lines_of_code == 4 * len(specific_stats)
+    assert summary_stats.blank_lines == 4 * len(specific_stats)
