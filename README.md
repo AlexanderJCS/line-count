@@ -86,3 +86,57 @@ $ linecount /path/to/dir -if ".py" -ef ".pyc"
 ```
 
 ## Python Usage
+
+### Importing
+
+You can import linecount by performing:
+```py
+import linecount as lc
+```
+
+### The LineStats Tuple
+
+The `LineStats` tuple is a common return value from line counting functions. It is a named tuple with five variables:
+- `filepath`: the path to the file the object is describing
+- `lines`: the total number of lines in the file
+- `souce_lines_of_code`: the number of source lines of code (SLOC) in the file
+- `commented_lines`: the number of commented lines in the file
+- `blank_lines`: the number of empty lines in the file
+
+### Count the lines of a file
+
+You can count the lines of a file with the `lc.count_lines_file(filepath: str)` function. It returns a `LineStats` named tuple.
+
+```py
+line_stats: lc.LineStats = lc.count_lines_file("path/to/file.txt")
+```
+
+### Counting the lines of a directory
+
+The `lc.count_lines_dir(dir_path: str)` function counts the lines of all files within a directory. It takes one required argument, `dir_path`.
+
+It returns a tuple of two values:
+- The first value is a `LineStats` object, and contains data on all the files in the directory summed up.
+- The second value is a `list[LineStats]`, and contains one entry per file that was counted.
+
+It also takes in two optional arguments:
+- `exclude_files: list[str]`: excludes any files with filenames containing any of the strings listed. For example, if `exclude_files` contains `[".py", ".txt"]`, all files containing `.py` or `.txt` in their name will be excluded.
+- `include_files: list[str]`: only filenames that contain one or more of the strings in the list will be included.
+
+Usage example:
+```py
+summary_stats, specific_stats = lc.count_lines_dir("path/to/dir", exclude_files=[".pyc"], include_files=[".py"])
+```
+
+### Counting lines of files within a directory recursively
+
+To recursively count the number of lines of files within a directory, the `lc.count_lines_dir_recursive(dir_path: str)` function can be used.  It takes one required argument, `dir_path`.
+
+It returns a tuple of two values:
+- The first value is a `LineStats` object, and contains data on all the files in the directory and subdirectories summed up.
+- The second value is a `list[LineStats]` data structure, and contains one entry per file that was counted.
+
+It contains three optional arguments:
+- `exclude_files: list[str]`: excludes any files with filenames containing any of the strings listed. For example, if `exclude_files` contains `[".py", ".txt"]`, all files containing `.py` or `.txt` in their name will be excluded.
+- `include_files: list[str]`: only filenames that contain one or more of the strings in the list will be included.
+- `exclude_dirs: list[str]`: directory names that contain one or more of the strings in the list  will be excluded.
