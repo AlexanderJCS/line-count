@@ -1,7 +1,7 @@
 import argparse
 import os.path
 
-from linecount import line_counting as lc
+from . import line_counting as lc
 
 
 def get_args() -> argparse.Namespace:
@@ -84,7 +84,7 @@ def cli():
 
     # Replace * for a . since otherwise it won't work properly
     if args.file_or_dir == "*":
-        args.file_or_dir = "linecount"
+        args.file_or_dir = ""
 
     args.excludefiles = [] if args.excludefiles is None else args.excludefiles.split(",")
     args.includefiles = [] if args.includefiles is None else args.includefiles.split(",")

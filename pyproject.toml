@@ -26,4 +26,4 @@ Homepage = "https://github.com/AlexanderJCS/line-count"
 Issues = "https://github.com/AlexanderJCS/line-count/issues"
 
 [project.scripts]
-linecount = "cli:cli"
+linecount = "linecount.cli:cli"
