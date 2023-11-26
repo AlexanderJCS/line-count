@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "linecount"
-version = "0.1.1"
+version = "1.0.0"
 
 authors = [
   {name="AlexanderJCS"},
@@ -13,7 +13,7 @@ authors = [
 description = "A small example package"
 readme = "README.md"
 
-requires-python = ">=3.8"
+requires-python = ">=3.6"
 
 classifiers = [
     "Programming Language :: Python :: 3",
