@@ -161,9 +161,6 @@ def count_lines_dir(
     if exclude_files is None:
         exclude_files = []
 
-    if include_files is None:
-        include_files = []
-
     summary_stats = LineStats(dir_path, 0, 0, 0, 0)
 
     individual_stats: list[LineStats] = []
