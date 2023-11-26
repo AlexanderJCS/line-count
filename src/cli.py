@@ -1,7 +1,7 @@
 import argparse
 import os.path
 
-import line_counting
+from linecount import line_counting as lc
 
 
 def get_args() -> argparse.Namespace:
@@ -44,7 +44,7 @@ def get_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def print_table(summary_stats: line_counting.LineStats, individual_stats: list[line_counting.LineStats]) -> None:
+def print_table(summary_stats: lc.LineStats, individual_stats: list[lc.LineStats]) -> None:
     """
     Prints a table with the provided data.
     :param summary_stats: All the items from invidual_stats added up.
@@ -84,7 +84,7 @@ def cli():
 
     # Replace * for a . since otherwise it won't work properly
     if args.file_or_dir == "*":
-        args.file_or_dir = "."
+        args.file_or_dir = "linecount"
 
     args.excludefiles = [] if args.excludefiles is None else args.excludefiles.split(",")
     args.includefiles = [] if args.includefiles is None else args.includefiles.split(",")
@@ -96,7 +96,7 @@ def cli():
 
     if os.path.isfile(args.file_or_dir):
         try:
-            stats = line_counting.count_lines_file(args.file_or_dir)
+            stats = lc.count_lines_file(args.file_or_dir)
 
         except PermissionError:
             print("You do not have permission to read that file!")
@@ -105,7 +105,7 @@ def cli():
             print_table(stats, [stats])
 
     elif args.recursive is True:
-        summary_stats, indivdual_stats = line_counting.count_lines_dir_recursive(
+        summary_stats, indivdual_stats = lc.count_lines_dir_recursive(
             args.file_or_dir,
             exclude_files=args.excludefiles,
             include_files=args.includefiles,
@@ -115,7 +115,7 @@ def cli():
         print_table(summary_stats, indivdual_stats)
 
     else:
-        summary_stats, individual_stats = line_counting.count_lines_dir(
+        summary_stats, individual_stats = lc.count_lines_dir(
             args.file_or_dir,
             exclude_files=args.excludefiles,
             include_files=args.includefiles
