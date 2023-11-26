@@ -140,3 +140,8 @@ It contains three optional arguments:
 - `exclude_files: list[str]`: excludes any files with filenames containing any of the strings listed. For example, if `exclude_files` contains `[".py", ".txt"]`, all files containing `.py` or `.txt` in their name will be excluded.
 - `include_files: list[str]`: only filenames that contain one or more of the strings in the list will be included.
 - `exclude_dirs: list[str]`: directory names that contain one or more of the strings in the list  will be excluded.
+
+Example usage:
+```py
+summary_stats, specific_stats = lc.count_lines_dir_recursive("path/to/dir", exclude_files=[".pyc"], include_files=[".py"], exclude_dirs=["venv"])
+```
