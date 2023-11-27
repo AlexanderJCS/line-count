@@ -55,14 +55,18 @@ def _inline_comment_status(line: str, in_comment: bool) -> bool | None:
     else:
         no_quote_content = line
 
+    if "/*" in no_quote_content:
+        return True
+
+    # You cannot exit a comment if you're not in a comment, so there's no point in checking if you exited a comment
+    if in_comment is False:
+        return None
+
     # If the last closing inline comment is after the last opening inline comment
     # AND it is after the opening inline comment, if it exists
     # Since no_quote_content is reversed, to find the last occurence, the findstr also needs to be reversed
     if no_quote_content[::-1].find("*/"[::-1]) > no_quote_content[::-1].find("/*"[::-1]):
         return False
-
-    if "/*" in no_quote_content:
-        return True
 
     return None
 
