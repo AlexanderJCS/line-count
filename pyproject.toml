@@ -10,7 +10,7 @@ authors = [
   {name="AlexanderJCS"},
 ]
 
-description = "A small example package"
+description = "Count lines of files!"
 readme = "README.md"
 
 requires-python = ">=3.6"
