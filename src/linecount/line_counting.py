@@ -174,7 +174,7 @@ def count_lines_dir(
             continue
 
         # Skip non-included files
-        if include_files is not None and not _fits_at_least_one_pattern(file, include_files):
+        if include_files and not _fits_at_least_one_pattern(file, include_files):
             continue
 
         # Add the line stats if the file is not excluded
@@ -230,7 +230,7 @@ def count_lines_dir_recursive(
                 continue
 
             # Skip non-included files
-            if include_files is not None and not _fits_at_least_one_pattern(file, include_files):
+            if include_files and not _fits_at_least_one_pattern(file, include_files):
                 continue
 
             try:
