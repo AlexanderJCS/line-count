@@ -44,6 +44,41 @@ def get_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _get_average(summary_stats: lc.LineStats, num_files: int) -> lc.LineStats:
+    """
+    Gets the average of a list of line stats objects.
+
+    :param summary_stats: A LineStats object that contains the data from all other LineStats objects summed up
+    :param num_files: The number of LineStats objects that summary_stats contains data of
+    :return: A LineCount object containing the average data from the line stats list
+    """
+
+    return lc.LineStats(
+        filepath="AVERAGE",
+        lines=round(summary_stats.lines / num_files),
+        source_lines_of_code=round(summary_stats.source_lines_of_code / num_files),
+        commented_lines=round(summary_stats.commented_lines / num_files),
+        blank_lines=round(summary_stats.blank_lines / num_files)
+    )
+
+
+def _print_row(stat: lc.LineStats, filepath_col_width: int, num_col_width) -> None:
+    """
+    Prints a row of LineStats data. Used for the print_table function.
+
+    :param stat: The line stats object to display data of
+    :param filepath_col_width: The width of the filepath column
+    :param num_col_width: The width of numerical columns, or columns containing numbers
+    """
+    print(
+        f"{stat.filepath:<{filepath_col_width}}|"
+        f"{stat.lines:^{num_col_width}}|"
+        f"{stat.source_lines_of_code:^{num_col_width}}|"
+        f"{stat.commented_lines:^{num_col_width}}|"
+        f"{stat.blank_lines:^{num_col_width}}"
+    )
+
+
 def print_table(summary_stats: lc.LineStats, individual_stats: list[lc.LineStats]) -> None:
     """
     Prints a table with the provided data.
@@ -61,12 +96,18 @@ def print_table(summary_stats: lc.LineStats, individual_stats: list[lc.LineStats
 
     filepath_col_width += 1
 
-    print(f"{'FILEPATH':^{filepath_col_width}}|{'LINES':^{num_col_width}}|{'SLOC':^{num_col_width}}|{'COMMENT':^{num_col_width}}|{'BLANK':^{num_col_width}}")
+    print(
+        f"{'FILEPATH':^{filepath_col_width}}|"
+        f"{'LINES':^{num_col_width}}|"
+        f"{'SLOC':^{num_col_width}}|"
+        f"{'COMMENT':^{num_col_width}}|"
+        f"{'BLANK':^{num_col_width}}"
+    )
 
     print("-" * (filepath_col_width + num_col_width * 4 + 4))
 
     for stat in individual_stats:
-        print(f"{stat.filepath:<{filepath_col_width}}|{stat.lines:^{num_col_width}}|{stat.source_lines_of_code:^{num_col_width}}|{stat.commented_lines:^{num_col_width}}|{stat.blank_lines:^{num_col_width}}")
+        _print_row(stat, filepath_col_width, num_col_width)
 
     # No need to print summary stats for one item
     if len(individual_stats) == 1:
@@ -76,7 +117,11 @@ def print_table(summary_stats: lc.LineStats, individual_stats: list[lc.LineStats
     if len(individual_stats) != 0:
         print("-" * (filepath_col_width + num_col_width * 4 + 4))
 
-    print(f"{'TOTAL':^{filepath_col_width}}|{summary_stats.lines:^{num_col_width}}|{summary_stats.source_lines_of_code:^{num_col_width}}|{summary_stats.commented_lines:^{num_col_width}}|{summary_stats.blank_lines:^{num_col_width}}")
+    summary_stats = summary_stats._replace(filepath="TOTAL")
+    average_stats = _get_average(summary_stats, len(individual_stats))
+
+    _print_row(average_stats, filepath_col_width, num_col_width)
+    _print_row(summary_stats, filepath_col_width, num_col_width)
 
 
 def cli():
