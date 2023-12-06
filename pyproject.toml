@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "linecount"
-version = "1.1.0"
+version = "1.1.1"
 
 authors = [
   {name="AlexanderJCS"},
@@ -22,8 +22,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/AlexanderJCS/line-count"
-Issues = "https://github.com/AlexanderJCS/line-count/issues"
+repository = "https://github.com/AlexanderJCS/line-count"
+homepage = "https://github.com/AlexanderJCS/line-count"
+issues = "https://github.com/AlexanderJCS/line-count/issues"
 
 [project.scripts]
 linecount = "linecount.cli:cli"

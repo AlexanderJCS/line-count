@@ -8,13 +8,14 @@ Some benefits of `linecount` include:
 - Exclude files or directories whose names contain certain characters. This is useful for excluding files with certain file extensions, or certain directories like `venv` or `.git`.
 - Only include files whose names contain certain characters. This is useful for counting lines of files with certain file extensions.
 
+You can view the PyPi page [here](https://pypi.org/project/linecount/)
+
 ## Installing
 
-You can install the project from the pypi test server:
+You can install the project from pypi:
 ```shell
-$ pip install -i https://test.pypi.org/simple/ linecount
+$ pip install linecount
 ```
-(this project is not on the main pypi yet, since account registration is closed for the main pypi server).
 
 ## Command Line Usage
 
