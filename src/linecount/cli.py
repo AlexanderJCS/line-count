@@ -55,7 +55,7 @@ def _get_average(summary_stats: lc.LineStats, num_files: int) -> lc.LineStats:
 
     return lc.LineStats(
         filepath="AVERAGE",
-        lines=round(summary_stats.lines / num_files),
+        lines=round(summary_stats.lines / num_files) if num_files != 0 else 0,
         source_lines_of_code=round(summary_stats.source_lines_of_code / num_files),
         commented_lines=round(summary_stats.commented_lines / num_files),
         blank_lines=round(summary_stats.blank_lines / num_files)
