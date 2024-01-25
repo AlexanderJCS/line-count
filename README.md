@@ -10,6 +10,10 @@ Some benefits of `linecount` include:
 
 You can view the PyPi page [here](https://pypi.org/project/linecount/)
 
+## Support
+
+This project is compatible with Python 3.10 or later. It has no dependencies.
+
 ## Installing
 
 You can install the project from pypi:
